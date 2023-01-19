@@ -35,7 +35,7 @@ def initialisation_immeuble_affichage():
 
 
 
-def lancer_ex_chemin(nb_etage1,taille_max1,taille_fenetre1,forme_etage1,liste_escalier_descendant1,liste_obstacle1):
+def lancer_ex_chemin(batiment,taille_fenetre1):
     global nb_etage 
     global taille_max
     global taille_fenetre
@@ -43,12 +43,12 @@ def lancer_ex_chemin(nb_etage1,taille_max1,taille_fenetre1,forme_etage1,liste_es
     global liste_escalier_descendant
     global liste_obstacle
     global flecheAff
-    nb_etage = nb_etage1
-    taille_max = taille_max1
-    taille_fenetre = taille_fenetre1
-    forme_etage = forme_etage1
-    liste_escalier_descendant = liste_escalier_descendant1
-    liste_obstacle = liste_obstacle1
+    nb_etage = batiment.nb_etage
+    taille_max = batiment.taille_max
+    taille_fenetre = batiment.taille_fenetre
+    forme_etage = batiment.forme_etage
+    liste_escalier_descendant = batiment.liste_escalier_descendant
+    liste_obstacle = batiment.liste_obstacle
     flecheAff = []
     global fenetre
     fenetre = Tk()                             
@@ -67,7 +67,6 @@ def lancer_ex_chemin(nb_etage1,taille_max1,taille_fenetre1,forme_etage1,liste_es
     initialisation_immeuble_affichage()
     global prochain_point 
     prochain_point = CanvasExp.create_oval(0,0,0,0,fill = 'blue')
-
 
     CanvasExp.bind("<Motion>",refresh)
     fenetre.mainloop()  

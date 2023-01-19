@@ -1,12 +1,27 @@
-import numpy as np
-class scene :
+from fonction import*
 
-    def __init__(self,liste_mur,liste_personne):
-        self.liste_mur = liste_mur
+class batiment_class :
+    def __init__(self,nb_etage,taille_max,forme_etage,liste_escalier_descendant,liste_obstacle):
+        self.nb_etage = nb_etage
+        self.taille_max = taille_max
+        self.forme_etage = forme_etage
+        self.liste_escalier_descendant = liste_escalier_descendant
+        self.liste_obstacle = liste_obstacle
+
+    @classmethod
+    def from_json(cls, data: dict):
+        return cls(**data)
+
+class scene :
+    def __init__(self,batiment,liste_personne):
+        self.batiment = batiment
         self.liste_personne = liste_personne
+
+    @classmethod
     def from_json(cls, data: dict):
         liste_personne = list(map(personne.from_json, data["liste_personne"]))
-        liste_mur = list(map(mur.from_json, data["liste_mur"]))
+        return(data['batiment'],liste_personne)
+
 
 class personne :
     def addDeltaPos(self,newpos,i):
@@ -43,81 +58,11 @@ class personne :
             #return cls(data['largeur'],data['vitesseMax'],data['vitesseActuelle'],data['positions'],data['masse'],data['acceleration'],'')
         return cls(**data)
 
-class mur:
-
-    def __init__(self,PosA,PosB):
-        self.PosA = PosA
-        self.PosB = PosB
-
-    @classmethod
-    def from_json(cls, data: dict):
-        return cls(**data)
-class pilier:
-    def __init__(self,position,largeur):
-            self.position = position
-            self.largeur = largeur
-
-    @classmethod
-    def from_json(cls, data: dict):
-        return cls(**data)
-class monde :
-
-    def init(self,nb,f):
-
-        for i in range (nb) :
-            a = personne(0.75,0.85,(0,0),[(500,300)],70,(0,0))
-            self.liste_personne.append(a)
-
-
-    def __init__(self,liste_personne,liste_mur,liste_zone,liste_pilier):
-        self.liste_personne = liste_personne
-        self.liste_mur = liste_mur
-        self.liste_zone = liste_zone
-        self.liste_pilier = liste_pilier
-
-    #Pour la deserialisation json
-    @classmethod
-    def from_json(cls, data: dict):
-        liste_personne = list(map(personne.from_json, data["liste_personne"]))
-        liste_mur = list(map(mur.from_json, data["liste_mur"]))
-        liste_zone = list(map(zone.from_json, data["liste_zone"]))
-        try :
-            liste_pilier = list(map(pilier.from_json, data["liste_pilier"]))
-            return cls(liste_personne,liste_mur,liste_zone,liste_pilier)
-        except:
-            return cls(liste_personne,liste_mur,liste_zone,[])
-
-
-class zone :
-
-    def __init__(self,arrivee,points,couleur,nom):
-        self.arrivee = arrivee
-        self.points = points
-        self.couleur = couleur
-        self.nom = nom
-
-    def contains(self, pos):
-        inter = 0
-
-        for i in range (0,len(self.points)):
-
-            if (self.points[i][0]<=pos[0]<=self.points[(i+1)%len(self.points)][0] or self.points[i][0]>=pos[0]>=self.points[(i+1)%len(self.points)][0]) and self.points[i][0] != self.points[(i+1)%len(self.points)] :
-                a = (self.points[(i+1)%len(self.points)][1]-self.points[i][1])/(self.points[(i+1)%len(self.points)][0]-self.points[i][0])
-                b = self.points[i][1]-a*self.points[i][0] # car PosA appartient a la droite donc veridie l'equation
-                y_d = a*pos[0] + b
-                if y_d>=pos[1]:
-                    inter = inter+1
-                #print("inter")
-        return (inter%2==1)
-
-    @classmethod
-    def from_json(cls, data: dict):
-        return cls(**data)
 
 class fichier:
-    def __init__(self,nom,monde,mode,temps):
+    def __init__(self,nom,scene,mode,temps):
         self.nom = nom
-        self.monde = monde
+        self.scene = scene
         self.mode = mode
         self.temps = temps
     @classmethod

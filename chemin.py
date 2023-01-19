@@ -1,17 +1,17 @@
 from fonction import*
 
-def initialisation_variable(liste_escalier_descendant1,liste_obstacle1,forme_etage1,nb_etage1,taille_max1,taille_fenetre1):
+def initialisation_variable(batiment,taille_fenetre1):
     global liste_escalier_descendant
     global liste_obstacle
     global forme_etage
     global nb_etage
     global taille_max
     global taille_fenetre
-    liste_escalier_descendant = liste_escalier_descendant1
-    liste_obstacle = liste_obstacle1
-    forme_etage = forme_etage1
-    nb_etage = nb_etage1
-    taille_max = taille_max1
+    liste_escalier_descendant = batiment.liste_escalier_descendant
+    liste_obstacle = batiment.liste_obstacle
+    forme_etage = batiment.forme_etage
+    nb_etage = batiment.nb_etage
+    taille_max = batiment.taille_max
     taille_fenetre = taille_fenetre1
     init_point_etage()
     init_sortie_plus_rapide()
