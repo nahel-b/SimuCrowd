@@ -1,3 +1,4 @@
+import numpy as np
 class scene :
 
     def __init__(self,liste_mur,liste_personne):
