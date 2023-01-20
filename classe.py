@@ -19,7 +19,7 @@ class scene_class :
 
     @classmethod
     def from_json(cls, data: dict):
-        liste_personne = list(map(personne.from_json, data["liste_personne"]))
+        liste_personne = list(map(personne_classe.from_json, data["liste_personne"]))
         return(data['batiment'],liste_personne)
 
 

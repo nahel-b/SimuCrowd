@@ -21,7 +21,7 @@ def calcul_basique(scene,debut,nb_seconde,nom):
     
         if i % 25 == 0:
             print(i)
-            deltaTime = (time.time()-start)/(i-debut)
+            #deltaTime = (time.time()-start)/(i-debut)
             #region
             #avancement1.config(text= str(round((i-deb)*100/(dataFichier.temps-deb))) + "%")
             #avancement2.config(text ="environ : " + str(round(deltaTime*(dataFichier.temps - i))) + "secondes")
@@ -37,7 +37,7 @@ def calcul_basique(scene,debut,nb_seconde,nom):
             #endregion
         for p in scene.liste_personne:
             p.vitesseActuelle = add(p.vitesseActuelle,multScal(dt,p.acceleration))
-
+            #print("---" + str(p.positions[i-1])+ "---" + str(p.positions))
             dir = chemin.get_direction_plus_rapide(p.positions[i-1],p.etage)
             
               
@@ -49,7 +49,7 @@ def calcul_basique(scene,debut,nb_seconde,nom):
             forme_e = scene.batiment.forme_etage
             for j in range(len(forme_e)):
                 #print(mur.PosA)
-                ForceMur = add(ForceMur,multScal((1/p.masse)*A*math.exp(((p.largeur/2)-distMurPoint(forme_e[j],forme_e[j%len(forme_e)],p.positions[i-1]))/B), ortho(forme_e[j],forme_e[j%len(forme_e)],p.positions[i-1]) ))             
+                ForceMur = add(ForceMur,multScal((1/p.masse)*A*math.exp(((p.largeur/2)-distMurPoint(forme_e[j],forme_e[(j+1)%len(forme_e)],p.positions[i-1]))/B), ortho(forme_e[j],forme_e[(j+1)%len(forme_e)],p.positions[i-1]) ))             
                 # ForceMur +=  (1/p)*(Ai*exp(ri-diw)/Bi)*niw
             
 

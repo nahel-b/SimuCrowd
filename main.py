@@ -13,16 +13,16 @@ liste_obstacle = [[[(45,33),(137,33),(95,122)]],[[(112,205),(112,58),(157,58),(1
 #95;196
 batiment = batiment_class(nb_etage,taille_max,forme_etage,liste_escalier_descendant,liste_obstacle)
 
-p1 = personne_classe(0,0,0,[0,0],0,0,"",0,0)
-p1.basique([50,50],0,0)
-p2 = personne_classe(0,0,0,[0,0],0,0,"",0,0)
-p2.basique([70,50],0,1)
-p3 = personne_classe(0,0,0,[0,0],0,0,"",0,0)
-p3.basique([50,50],1,2)
+p1 = personne_classe(0,0,0,[(0,0)],0,0,"",0,0)
+p1.basique((51,50),0,0)
+p2 = personne_classe(0,0,0,[(0,0)],0,0,"",0,0)
+p2.basique((70,50),0,1)
+p3 = personne_classe(0,0,0,[(0,0)],0,0,"",0,0)
+p3.basique((50,50),1,2)
 scene = scene_class(batiment,[p1,p2,p3],60)
 
 chemin.initialisation_variable(batiment,taille_fenetre)
-Calcul_simulation.calcul_basique(scene,0,20,"test")
+Calcul_simulation.calcul_basique(scene,1,20,"test")
 #affichage.lancer_ex_chemin(batiment,taille_fenetre)
 
 
