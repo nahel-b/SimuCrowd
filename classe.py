@@ -23,7 +23,7 @@ class scene_class :
         return(data['batiment'],liste_personne)
 
 
-class personne :
+class personne_classe :
     def addDeltaPos(self,newpos,i):
         l = len(self.positions)
         if(l>i):
@@ -42,7 +42,7 @@ class personne :
         self.id = id
 
 
-    def basique(self,pos,etage):
+    def basique(self,pos,etage,id):
         self.largeur = 0.75
         self.vitesseMax = 0.85
         self.vitesseActuelle = (0,0)
@@ -51,6 +51,7 @@ class personne :
         self.acceleration = (0,0)
         self.couleur = "blue"
         self.etage = etage
+        self.id = id
         #self.positions.append((DIMENTIONS[0]/2,DIMENTIONS[1]/2))
 
     #Pour la deserialisation json

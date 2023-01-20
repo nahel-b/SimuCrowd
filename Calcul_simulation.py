@@ -20,6 +20,7 @@ def calcul_basique(scene,debut,nb_seconde,nom):
         index=0
     
         if i % 25 == 0:
+            print(i)
             deltaTime = (time.time()-start)/(i-debut)
             #region
             #avancement1.config(text= str(round((i-deb)*100/(dataFichier.temps-deb))) + "%")
@@ -34,7 +35,6 @@ def calcul_basique(scene,debut,nb_seconde,nom):
             #     indaff = indaff+1
             # fenetre.update()
             #endregion
-        
         for p in scene.liste_personne:
             p.vitesseActuelle = add(p.vitesseActuelle,multScal(dt,p.acceleration))
 
@@ -54,7 +54,7 @@ def calcul_basique(scene,debut,nb_seconde,nom):
             
 
             for ps in scene.liste_personne:
-                if ps != p:
+                if ps != p and ps.etage == p.etage:
                     n = multScal(dist(ps.positions[i-1],p.positions[i-1]),sub(p.positions[i-1],ps.positions[i-1]))#(ri − rj )/dij
                     ForcePersonnes = add(ForcePersonnes,multScal( A*math.exp(((p.largeur/2)-dist(ps.positions[i-1],p.positions[i-1]))/B),n))
             p.acceleration =  add( directionVoulue, add( ForceMur, add(ForcePersonnes,ForcePilier) ))
@@ -64,4 +64,4 @@ def calcul_basique(scene,debut,nb_seconde,nom):
             index=index+1
 
         res = fichier_class(nom,scene,"simu",nb_seconde)
-        return res
+        save(nom,res)
