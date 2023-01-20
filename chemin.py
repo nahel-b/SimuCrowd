@@ -118,12 +118,12 @@ def get_plus_rapide_prochain_sortie(etage,position):
     return res_sortie
 
 #renvoie la prochaine position ou aller en prenant en compte le decalage
-def get_direction(pos_reel):
-    etage_n = int(pos_reel[0]/taille_max[0] ) + int(pos_reel[1]/taille_max[1])*int(taille_fenetre[0]/taille_max[0])
-    i = etage_n
-    pos_abs = (pos_reel[0]%taille_max[0],pos_reel[1]%taille_max[1])
-    decalage = ((i*taille_max[0])%taille_fenetre[0],taille_max[1]*math.floor((i*taille_max[0])/taille_fenetre[0]))
-    res_sortie = get_plus_rapide_prochain_sortie(etage_n,pos_abs)
-    p = premier_point(etage_n,res_sortie,pos_abs)[1]
-    d = dist(pos_reel,p)
-    return ((p[0]-pos_reel[0])/d,(p[1]-pos_reel[1])/d)
+def get_direction_plus_rapide(pos,etage):
+    #etage_n = int(pos_reel[0]/taille_max[0] ) + int(pos_reel[1]/taille_max[1])*int(taille_fenetre[0]/taille_max[0])
+    #i = etage_n
+    #pos_abs = (pos_reel[0]%taille_max[0],pos_reel[1]%taille_max[1])
+    #decalage = ((i*taille_max[0])%taille_fenetre[0],taille_max[1]*math.floor((i*taille_max[0])/taille_fenetre[0]))
+    res_sortie = get_plus_rapide_prochain_sortie(etage,pos)
+    p = premier_point(etage,res_sortie,pos)[1]
+    d = dist(pos,p)
+    return ((p[0]-pos[0])/d,(p[1]-pos[1])/d)

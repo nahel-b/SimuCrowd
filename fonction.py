@@ -10,10 +10,7 @@ def multScal(s,a):
     return(s*a[0],s*a[1])
 def mult(a,b):
     return(a[0]*b[0],a[1]*b[1])
-def normal(A,B):
-    AB=(B[0]-A[0],B[1]-A[1])
-    u=(AB[0]/math.sqrt(AB[0]**2+AB[1]**2),AB[1]/math.sqrt(AB[0]**2+AB[1]**2))
-    return u
+
 def MultListe(a,z):
         res = []
         for couple in a:

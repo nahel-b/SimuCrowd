@@ -12,8 +12,8 @@ class batiment_class :
     def from_json(cls, data: dict):
         return cls(**data)
 
-class scene :
-    def __init__(self,batiment,liste_personne):
+class scene_class :
+    def __init__(self,batiment,liste_personne,temps):
         self.batiment = batiment
         self.liste_personne = liste_personne
 
@@ -30,7 +30,7 @@ class personne :
             self.positions[i] = add(self.positions[i-1],newpos)
         else:
             self.positions.append(add(self.positions[l-1],newpos))
-    def __init__(self,largeur,vitesseMax,vitesseActuelle,positions,masse,acceleration,couleur):
+    def __init__(self,largeur,vitesseMax,vitesseActuelle,positions,masse,acceleration,couleur,etage,id):
         self.largeur = largeur
         self.vitesseMax = vitesseMax
         self.vitesseActuelle = vitesseActuelle
@@ -38,15 +38,19 @@ class personne :
         self.positions = positions
         self.masse = masse
         self.couleur = couleur
+        self.etage = etage
+        self.id = id
 
 
-    def basique(self,pos):
+    def basique(self,pos,etage):
         self.largeur = 0.75
         self.vitesseMax = 0.85
         self.vitesseActuelle = (0,0)
         self.positions = [pos]
         self.masse = 70
         self.acceleration = (0,0)
+        self.couleur = "blue"
+        self.etage = etage
         #self.positions.append((DIMENTIONS[0]/2,DIMENTIONS[1]/2))
 
     #Pour la deserialisation json
@@ -59,7 +63,7 @@ class personne :
         return cls(**data)
 
 
-class fichier:
+class fichier_class:
     def __init__(self,nom,scene,mode,temps):
         self.nom = nom
         self.scene = scene

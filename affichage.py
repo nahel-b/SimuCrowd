@@ -45,7 +45,7 @@ def lancer_ex_chemin(batiment,taille_fenetre1):
     global flecheAff
     nb_etage = batiment.nb_etage
     taille_max = batiment.taille_max
-    taille_fenetre = batiment.taille_fenetre
+    taille_fenetre = taille_fenetre1
     forme_etage = batiment.forme_etage
     liste_escalier_descendant = batiment.liste_escalier_descendant
     liste_obstacle = batiment.liste_obstacle
