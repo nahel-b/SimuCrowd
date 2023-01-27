@@ -132,7 +132,7 @@ def ortho(PosA,PosB,p):
 
 def save(nom,data):
     encode = (encodeur().encode(data))
-    with open(nom, 'w') as f:
+    with open(nom + ".json", 'w') as f:
         json.dump(json.loads(encode),f, indent=4, sort_keys=True)
 
 

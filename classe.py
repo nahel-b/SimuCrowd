@@ -30,7 +30,7 @@ class personne_classe :
             self.positions[i] = add(self.positions[i-1],newpos)
         else:
             self.positions.append(add(self.positions[l-1],newpos))
-    def __init__(self,largeur,vitesseMax,vitesseActuelle,positions,masse,acceleration,couleur,etage,id):
+    def __init__(self,largeur,vitesseMax,vitesseActuelle,positions,masse,acceleration,couleur,liste_etage,id):
         self.largeur = largeur
         self.vitesseMax = vitesseMax
         self.vitesseActuelle = vitesseActuelle
@@ -38,11 +38,11 @@ class personne_classe :
         self.positions = positions
         self.masse = masse
         self.couleur = couleur
-        self.etage = etage
+        self.liste_etage = liste_etage #(temps,etage)
         self.id = id
 
 
-    def basique(self,pos,etage,id):
+    def basique(self,pos,liste_etage,id):
         self.largeur = 0.75
         self.vitesseMax = 0.85
         self.vitesseActuelle = (0,0)
@@ -50,7 +50,7 @@ class personne_classe :
         self.masse = 70
         self.acceleration = (0,0)
         self.couleur = "blue"
-        self.etage = etage
+        self.liste_etage = liste_etage
         self.id = id
         #self.positions.append((DIMENTIONS[0]/2,DIMENTIONS[1]/2))
 
@@ -61,6 +61,7 @@ class personne_classe :
         #    print(data['couleur'])
         #except:
             #return cls(data['largeur'],data['vitesseMax'],data['vitesseActuelle'],data['positions'],data['masse'],data['acceleration'],'')
+        
         return cls(**data)
 
 
