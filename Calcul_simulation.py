@@ -3,7 +3,6 @@ from classe import*
 import time 
 import chemin
 
-zoom = 10
 
 def get_etage(id):
     return sc.liste_personne[id].liste_etage[-1][1]
@@ -55,7 +54,7 @@ def calcul_basique(scene,debut,temps,nom):
         for p in scene.liste_personne:
             p.vitesseActuelle = add(p.vitesseActuelle,multScal(dt,p.acceleration))
             #print("---" + str(p.positions[i-1])+ "---" + str(p.positions))
-            dir = chemin.get_direction_plus_rapide(multScal(zoom,p.positions[i-1]),get_etage(p.id))
+            dir = chemin.get_direction_plus_rapide(p.positions[i-1],get_etage(p.id))
             
               
             directionVoulue = multScal(1/T,sub(multScal(p.vitesseMax,dir),p.vitesseActuelle))
@@ -66,8 +65,8 @@ def calcul_basique(scene,debut,temps,nom):
             forme_e = scene.batiment.forme_etage
             for j in range(len(forme_e)):
                 #print(mur.PosA)
-                fj = multScal(1/zoom,forme_e[j])
-                fj2 = multScal(1/zoom,forme_e[(j+1)%len(forme_e)])
+                fj = forme_e[j]
+                fj2 = forme_e[(j+1)%len(forme_e)]
                 ForceMur = add(ForceMur,multScal((1/p.masse)*A*math.exp(((p.largeur/2)-distMurPoint(fj,fj2,p.positions[i-1]))/B), ortho(fj,fj2,p.positions[i-1]) ))             
                 # ForceMur +=  (1/p)*(Ai*exp(ri-diw)/Bi)*niw
             

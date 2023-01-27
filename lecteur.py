@@ -18,9 +18,11 @@ affichage_personne = []
 change = []
 zoom = 10 #10 pix = 1m
 
-def lancer_lecteur(dataFichier1,taille_fenetre1):
+def lancer_lecteur(dataFichier1,taille_fenetre1,zoom1):
     global dataFichier 
     dataFichier = dataFichier1
+    global zoom
+    zoom = zoom1
     global taille_fenetre
     taille_fenetre = taille_fenetre1
     global fenetre 
@@ -41,6 +43,8 @@ def lancer_lecteur(dataFichier1,taille_fenetre1):
     l1.pack(fill="both")
     global multTemps
     multTemps = 1
+    global fps
+    fps = 30
     global coord
     coord = CanvasExp.create_text(30,8,text = "",font = ('Helvetica','12','normal'))
 
@@ -59,25 +63,19 @@ def initialisation_immeuble_affichage():
     liste_obstacle = dataFichier.scene.batiment.liste_obstacle
     for i in range (nb_etage):
         decalage = ((i*taille_max[0])%taille_fenetre[0],taille_max[1]*math.floor((i*taille_max[0])/taille_fenetre[0]))
-        CanvasExp.create_polygon(plus_liste(decalage,forme_etage),fill="",outline='black')
+        CanvasExp.create_polygon(MultListe(plus_liste(decalage,forme_etage),zoom),fill="",outline='black')
         #affiche entree/sortie
+        rayon = 0.5
         for fleche in liste_escalier_descendant[i]:
             if i!=0 :
                 #affiche entree etage i-1
                 decalageBis = (((i-1)*taille_max[0])%taille_fenetre[0],taille_max[1]*math.floor(((i-1)*taille_max[0])/taille_fenetre[0]))
-                milieu = (decalageBis[0]+(taille_max[0]/2),decalageBis[1]+(taille_max[1]/2))
-                direction = (normal(fleche,milieu)[0]*13,normal(fleche,milieu)[1]*13)
-                CanvasExp.create_line(decalageBis[0]+fleche[0],decalageBis[1]+fleche[1],decalageBis[0]+fleche[0]+direction[0],decalageBis[1]+fleche[1]+direction[1],arrow='last',fill ='blue')
-                #affiche sortie etage i
-                milieu = (decalage[0]+(taille_max[0]/2),decalage[1]+(taille_max[1]/2))
-                direction2 = (normal(milieu,fleche)[0]*13,normal(milieu,fleche)[1]*13)
-                CanvasExp.create_line(decalage[0]+fleche[0],decalage[1]+fleche[1],decalage[0]+fleche[0]+direction[0],decalage[1]+fleche[1]+direction[1],arrow='first',fill ='red')
+                CanvasExp.create_oval((fleche[0]-rayon+decalage[0])*zoom,(fleche[1]-rayon+decalage[1])*zoom,(fleche[0]+rayon+decalage[0])*zoom,(fleche[1]+rayon+decalage[1])*zoom,fill ='red')
             else :
-                rayon = 5
-                CanvasExp.create_oval(fleche[0]-rayon,fleche[1]-rayon,fleche[0]+rayon,fleche[1]+rayon,fill = 'green')
+                CanvasExp.create_oval((fleche[0]-rayon)*zoom,(fleche[1]-rayon)*zoom,(fleche[0]+rayon)*zoom,(fleche[1]+rayon)*zoom,fill = 'green')
         #affiche obstacles
         for obstacle in liste_obstacle[i]:
-                CanvasExp.create_polygon(plus_liste(decalage,obstacle),fill="black",outline='black')
+                CanvasExp.create_polygon(MultListe(plus_liste(decalage,obstacle),zoom),fill="black",outline='black')
 
 
 def get_etage(id,temps):
@@ -102,13 +100,11 @@ def update_pos():
     for p in dataFichier.scene.liste_personne:
         i = get_etage(p.id,temps)
         decalage = ((i*taille_max[0])%taille_fenetre[0],taille_max[1]*math.floor((i*taille_max[0])/taille_fenetre[0]))
-        print("decalage : "  + str(decalage))
-
         CanvasExp.coords(affichage_personne[indaff],
-        ((p.positions[temps][0]-(p.largeur/2))*zoom+decalage[0]), 
-        ((p.positions[temps][1]-(p.largeur/2))*zoom+decalage[1]),
-        ((p.positions[temps][0]+(p.largeur/2))*zoom+decalage[0]),
-        ((p.positions[temps][1]+(p.largeur/2))*zoom+decalage[1]))
+        ((p.positions[temps][0]-(p.largeur/2)+decalage[0])*zoom), 
+        ((p.positions[temps][1]-(p.largeur/2)+decalage[1])*zoom),
+        ((p.positions[temps][0]+(p.largeur/2)+decalage[0])*zoom),
+        ((p.positions[temps][1]+(p.largeur/2)+decalage[1])*zoom))
         indaff = indaff +1
 
 
@@ -137,15 +133,19 @@ def multbtnset():
         multTemps = 1
     multbtn.config(text ="x" + str(multTemps))
     
-  
+# si t_exp = 60s
+# datafichier.temps = 60*60
+# fps = xframe/1s
+
 def updatePlay():
     global play
     global scaleObj
     global multTemps
     if play:    
-        scaleObj.set( round ((scaleObj.get() + (multTemps*60/20)) % dataFichier.temps))
+        delta = 1/fps #delta en seconde
+        scaleObj.set( round ((scaleObj.get() + (multTemps*60*delta)) % dataFichier.temps))#60 = 1 seconde
         LabelTemps.config(text="temps : " + str(int(scaleObj.get()/60)) + "s")
-        fenetre.after(round(1000/20),updatePlay)
+        fenetre.after(round(1000*delta),updatePlay)
         
     
 def initVisionnage():
@@ -162,13 +162,15 @@ def initVisionnage():
     global affichage_personne
     affichage_personne = []
     play = False
-    
+    taille_max = dataFichier.scene.batiment.taille_max
     for p in dataFichier.scene.liste_personne:
+        i = get_etage(p.id,0)
+        decalage = ((i*taille_max[0])%taille_fenetre[0],taille_max[1]*math.floor((i*taille_max[0])/taille_fenetre[0]))
         affichage_personne.append(CanvasExp.create_oval(
-        (p.positions[0][0]-(p.largeur/2))*zoom, 
-        (p.positions[0][1]-(p.largeur/2))*zoom, 
-        (p.positions[0][0]+(p.largeur/2))*zoom,
-        (p.positions[0][1]+(p.largeur/2))*zoom,fill=p.couleur))
+        ((p.positions[0][0]-(p.largeur/2)+decalage[0])*zoom), 
+        ((p.positions[0][1]-(p.largeur/2)+decalage[1])*zoom),
+        ((p.positions[0][0]+(p.largeur/2)+decalage[0])*zoom),
+        ((p.positions[0][1]+(p.largeur/2)+decalage[1])*zoom),fill=p.couleur))
 
 
     tempsVar = StringVar()
