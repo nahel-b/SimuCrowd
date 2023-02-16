@@ -58,7 +58,8 @@ def calcul_basique(scene,debut,temps,nom):
                     fj2 = forme_e[(j+1)%len(forme_e)]
                     ForceMur = add(ForceMur,multScal((1/p.masse)*A*math.exp(((p.largeur/2)-distMurPoint(fj,fj2,p.positions[i-1]))/B), ortho(fj,fj2,p.positions[i-1]) ))             
                     # ForceMur +=  (1/p)*(Ai*exp(ri-diw)/Bi)*niw
-                
+                 
+            
                 for j in range(len(scene.batiment.liste_obstacle[etage_personne])):
                     obstacle = scene.batiment.liste_obstacle[etage_personne][j]
                     for k in range(len(obstacle)):

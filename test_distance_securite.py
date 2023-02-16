@@ -1,5 +1,23 @@
 import math
 
+def vec_entre(v1, v2, k):
+    # Calcul de l'angle entre les deux vecteurs
+    dot_prod = v1[0]*v2[0] + v1[1]*v2[1]
+    norm_prod = math.sqrt(v1[0]**2 + v1[1]**2) * math.sqrt(v2[0]**2 + v2[1]**2)
+    angle = math.acos(dot_prod/norm_prod)
+    
+    # Calcul de l'angle entre chaque paire de vecteurs consécutifs
+    angle_entre_vecteurs = angle / (k+1)
+    
+    # Calcul des vecteurs unitaires correspondant aux angles
+    res = []
+    for i in range(1, k+1):
+        x = v1[0]*math.cos(i*angle_entre_vecteurs) + v1[1]*math.sin(i*angle_entre_vecteurs)
+        y = -v1[0]*math.sin(i*angle_entre_vecteurs) + v1[1]*math.cos(i*angle_entre_vecteurs)
+        res.append((x,y))
+    
+    return res
+
 def agrandir_forme(forme, distance,k):
     nouvelle_forme = []
     for i in range(len(forme)):
@@ -27,11 +45,14 @@ def agrandir_forme(forme, distance,k):
             continue
         nx_next = -dy_next / distance_segment_suivant
         ny_next = dx_next / distance_segment_suivant
-        angle = math.atan2(ny + ny_next, nx + nx_next)
-        nx_coin = math.cos(angle)
-        ny_coin = math.sin(angle)
-        nouveau_point3 = (point_actuel[0] + nx_coin * distance, point_actuel[1] + ny_coin * distance)
-        nouvelle_forme.append(nouveau_point3)
+        vec_coin = vec_entre((nx,ny), (nx_next,ny_next), k)
+        for vec in vec_coin:
+            nouvelle_forme.append((vec[0]*distance+point_actuel[0],vec[1]*distance+point_actuel[1]))
+        # angle = math.atan2(ny + ny_next, nx + nx_next)
+        # nx_coin = math.cos(angle)
+        # ny_coin = math.sin(angle)
+        # nouveau_point3 = (point_actuel[0] + nx_coin * distance, point_actuel[1] + ny_coin * distance)
+        # nouvelle_forme.append(nouveau_point3)
         
     return nouvelle_forme
 
@@ -44,9 +65,9 @@ import tkinter as tk
 
 
 # Coordonnées de la forme initiale
-forme = [(100, 100), (200, 20), (30, 50)]
+forme = [(100, 100), (200, 20), (30, 50),(100,300),(300,100)]
 # Coordonnées de la forme agrandie
-forme_agrandie = agrandir_forme(forme,10,1)
+forme_agrandie = agrandir_forme(forme,10,3)
 # Créer la fenêtre et le canvas
 root = tk.Tk()
 canvas = tk.Canvas(root, width=400, height=400)
