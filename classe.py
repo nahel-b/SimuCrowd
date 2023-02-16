@@ -44,7 +44,7 @@ class personne_classe :
 
     def basique(self,pos,liste_etage,id):
         self.largeur = 0.75
-        self.vitesseMax = 0.85
+        self.vitesseMax = 3.5
         self.vitesseActuelle = (0,0)
         self.positions = [pos]
         self.masse = 70

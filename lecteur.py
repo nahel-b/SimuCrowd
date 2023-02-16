@@ -65,7 +65,7 @@ def initialisation_immeuble_affichage():
         decalage = ((i*taille_max[0])%taille_fenetre[0],taille_max[1]*math.floor((i*taille_max[0])/taille_fenetre[0]))
         CanvasExp.create_polygon(MultListe(plus_liste(decalage,forme_etage),zoom),fill="",outline='black')
         #affiche entree/sortie
-        rayon = 0.5
+        rayon = 0.3
         for fleche in liste_escalier_descendant[i]:
             if i!=0 :
                 #affiche entree etage i-1
