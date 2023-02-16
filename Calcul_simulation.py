@@ -23,7 +23,6 @@ def calcul_basique(scene,debut,temps,nom):
         personne_etage.append([])
     for p in scene.liste_personne:
         personne_etage[p.liste_etage[0][1]].append(p.id)
-    print(personne_etage)
 
     start = time.time()
     for i in range (round(debut),round(temps)+1): # rafraississement : 1/60 de seconde pour 3 x 1 min (60*60*3)
@@ -36,14 +35,14 @@ def calcul_basique(scene,debut,temps,nom):
         index=0
     
         if i % 100 == 0:
-            print(str(round((i/round(temps))*100)) + "%")
+            print(str(round((i/round(temps))*100)) + "% (calcul)", end='\r')
         for p in scene.liste_personne:
 
             if get_etage(p.id) == -1:
                 p.addDeltaPos((0,0),i)
             else :
                 p.vitesseActuelle = add(p.vitesseActuelle,multScal(dt,p.acceleration))
-                dir = chemin.get_direction_plus_rapide(p.positions[i-1],get_etage(p.id))
+                dir = chemin.get_direction_plus_rapide(p.positions[i-1],get_etage(p.id),p.largeur)
                 directionVoulue = multScal(1/T,sub(multScal(p.vitesseMax,dir),p.vitesseActuelle))
                 ForceMur = (0,0)
                 ForcePersonnes = (0,0)
@@ -83,22 +82,22 @@ def calcul_basique(scene,debut,temps,nom):
                 for descente in scene.batiment.liste_escalier_descendant[etage_personne] :
                     #print(dist(p.positions[i],descente) < p.largeur*2)
                     if(dist(p.positions[i],descente) < p.largeur):
-                        if get_etage(ps.id) == 0:
+                        if etage_personne == 0:
                             personne_etage[etage_personne].remove(p.id)
                             personne_etage[etage_personne-1].append(p.id)
                             p.liste_etage.append((i,etage_personne-1))
-                            print("switch")
+
                         else :
                             trigger = False
-                            for id2 in personne_etage[etage_personne]:
-                                if (dist(p.positions[i],scene.liste_personne[id2].positions[i-1]) < p.largeur and p.id != id2):
+                            for id2 in personne_etage[etage_personne-1]:
+                                if (dist(p.positions[i],scene.liste_personne[id2].positions[i-1]) < 1.5*max(p.largeur,scene.liste_personne[id2].largeur) and p.id != id2):
                                     trigger = True
                                     #print((dist(p.positions[i],scene.liste_personne[id2].positions[i-1]),id2))
                             if not trigger:
                                 personne_etage[etage_personne].remove(p.id)
                                 personne_etage[etage_personne-1].append(p.id)
                                 p.liste_etage.append((i,etage_personne-1))
-                                print("switch")
+
 
                 
 

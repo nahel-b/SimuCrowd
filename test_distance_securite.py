@@ -100,7 +100,8 @@ def agrandir_forme(forme, distance,k): #k : le nb de point a ajouter pour les co
 
 
 # Coordonnées de la forme initiale
-forme = [(200, 100), (200, 20), (30, 50),(100,300),(150,150),(300,100)]
+#forme = [(200, 100), (200, 20), (30, 50),(100,300),(150,150),(300,100)]
+forme = [(45,3),(95,120),(140,30)]
 # Coordonnées de la forme agrandie
 forme_agrandie = agrandir_forme(forme,10,2)
 # Créer la fenêtre et le canvas

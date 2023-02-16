@@ -76,6 +76,8 @@ def initialisation_immeuble_affichage():
         #affiche obstacles
         for obstacle in liste_obstacle[i]:
                 CanvasExp.create_polygon(MultListe(plus_liste(decalage,obstacle),zoom),fill="black",outline='black')
+                CanvasExp.create_polygon(MultListe(plus_liste(decalage,agrandir_forme(obstacle,0.75,2)),zoom),fill="",outline='red')
+
 
 
 def get_etage(id,temps):
