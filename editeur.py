@@ -2,7 +2,7 @@ from tkinter import *
 from fonction import*
 
 class FenetrePrincipale(Frame):
-    def __init__(self, master=None,forme_etage=[]):
+    def __init__(self, master=None,forme_etage=[],nb_etage=0,taille_max = (20,30),liste_escalier_descendant=[],liste_obstacle=[]):
         super().__init__(master)
         self.master = master
         self.master.title("Ma fenêtre")
@@ -10,39 +10,121 @@ class FenetrePrincipale(Frame):
         self.pack(fill=BOTH, expand=True)
 
         self.forme_etage = forme_etage
-        #self.nb_etage
+        self.nb_etage = nb_etage
+        self.taille_max = taille_max
+        self.liste_escalier_descendant = liste_escalier_descendant
+        self.liste_obstacle = liste_obstacle
+        self.taille_canvas = (1000,600)
+        self.zoom = 10
+        self.delta = 1
 
+        self.etage_obj = []
         self.create_widgets()
+
+    def refresh_etage(self):
+
+        for obj in self.etage_obj:
+            self.canvas.delete(obj)
+
+        nb_etage = self.nb_etage
+        forme_etage = self.forme_etage
+        taille_max = (self.taille_max[0], self.taille_max[1])
+        liste_escalier_descendant = self.liste_escalier_descendant
+        liste_obstacle = self.liste_obstacle
+        taille_fenetre = (self.taille_canvas[0]/self.zoom,self.taille_canvas[1]/self.zoom)
+        zoom = self.zoom
+        for i in range (nb_etage):
+            decalage = ((i*taille_max[0])%(taille_fenetre[0]),taille_max[1]*math.floor(((i)*taille_max[0])/taille_fenetre[0]))
+            print(decalage)
+            self.etage_obj.append( self.canvas.create_polygon(MultListe(plus_liste(decalage,forme_etage),zoom),fill="white",outline='black'))
+            #affiche entree/sortie
+            rayon = 0.3
+            for fleche in liste_escalier_descendant[i]:
+                if i!=0 :
+                    #affiche entree etage i-1
+                    decalageBis = (((i-1)*taille_max[0])%taille_fenetre[0],taille_max[1]*math.floor(((i-1)*taille_max[0])/taille_fenetre[0]))
+                    self.canvas.create_oval((fleche[0]-rayon+decalage[0])*zoom,(fleche[1]-rayon+decalage[1])*zoom,(fleche[0]+rayon+decalage[0])*zoom,(fleche[1]+rayon+decalage[1])*zoom,fill ='red')
+                else :
+                    self.canvas.create_oval((fleche[0]-rayon)*self.zoom,(fleche[1]-rayon)*zoom,(fleche[0]+rayon)*zoom,(fleche[1]+rayon)*zoom,fill = 'green')
+            #affiche obstacles
+            for obstacle in liste_obstacle[i]:
+                    self.canvas.create_polygon(MultListe(plus_liste(decalage,obstacle),zoom),fill="black",outline='black')
+                    self.canvas.create_polygon(MultListe(plus_liste(decalage,agrandir_forme(obstacle,0.75,2)),zoom),fill="",outline='red')
 
     def create_widgets(self):
 
-        self.canvas = Canvas(self.master, width=1000, height=600, bg="white")
+        
+        self.canvas = Canvas(self.master, width=self.taille_canvas[0], height=self.taille_canvas[1], bg="white")
         self.canvas.pack(side=LEFT)
-        f_menue = Frame(self.master, width=200, height=1000, bg="#F5F5F5")
+        f_menue = Frame(self.master, width=200, height=self.taille_canvas[1], bg="#F5F5F5")
         f_menue.pack(side=RIGHT)
         self.l_info = LabelFrame(f_menue, text="Informations", padx=20, pady=20, bg="#F5F5F5")
         self.l_info.pack(fill="both")
         
         self.l_nb_personnes = Label(self.l_info, text="nb de personnes")
         self.l_nb_personnes.pack()
+
+
         
-        self.f_temps = Frame(self.l_info, bg="#F5F5F5")
-        self.f_temps.pack(side=TOP, fill=X)
         
-        self.l_temps = Label(self.f_temps, text="temps:")
-        self.l_temps.pack(side=LEFT)
+        self.refresh_etage()
+
+        def incrementer(var):
+            x = var.get()
+            var.set(x + 1)
+            if var == self.var_etage:
+                self.nb_etage = x+1
+                self.liste_escalier_descendant.append([])
+                self.liste_obstacle.append([])
+                self.refresh_etage()
+
+            elif var == self.var_temps:
+                    self.temps = self.var_temps.get()
+    
+        def decrementer(var):
+            x = var.get()
+            if x > 0:
+                var.set(x - 1)
+                if var == self.var_etage:
+                    self.nb_etage = x-1
+                    self.liste_escalier_descendant.pop()
+                    self.liste_obstacle.pop()
+                    self.refresh_etage()
+
+                elif var == self.var_temps:
+                    self.temps = self.var_temps.get()
+
+        def create_temps_input():
+            self.f_temps = Frame(self.l_info, bg="#F5F5F5")
+            self.f_temps.pack(side=TOP, fill=X)
+            self.l_temps = Label(self.f_temps, text="temps:")
+            self.l_temps.pack(side=LEFT)
+            self.var_temps = IntVar()
+            self.var_temps.set(0)
+            self.b_plus_temps = Button(self.f_temps, text="+", width=1, command=lambda: incrementer(self.var_temps))
+            self.b_plus_temps.pack(side=LEFT, padx=5)
+            self.b_moins_temps = Button(self.f_temps, text="-", width=1, command=lambda: decrementer(self.var_temps))
+            self.b_moins_temps.pack(side=LEFT)
+            self.input_temps = Entry(self.f_temps, validate="key", width=3, textvariable=self.var_temps)
+            self.input_temps.pack(side=LEFT)
         
-        self.b_plus = Button(self.f_temps, text="+", width=1, command=self.incrementer_temps)
-        self.b_plus.pack(side=LEFT, padx=5)
+        create_temps_input()
+
+        def create_nb_etage_input():
+            self.var_etage = IntVar()
+            self.var_etage.set(self.nb_etage)
+            self.f_etage = Frame(self.l_info, bg="#F5F5F5")
+            self.f_etage.pack(side=TOP, fill=X)
+            self.l_etage = Label(self.f_etage, text="etage:")
+            self.l_etage.pack(side=LEFT)
+            self.b_plus_temps = Button(self.f_etage, text="+", width=1, command=lambda: incrementer(self.var_etage))
+            self.b_plus_temps.pack(side=LEFT, padx=5)
+            self.b_moins_temps = Button(self.f_etage, text="-", width=1, command=lambda: decrementer(self.var_etage))
+            self.b_moins_temps.pack(side=LEFT)
+            self.input_etage = Entry(self.f_etage, validate="key", width=3, textvariable=self.var_etage)
+            self.input_etage.pack(side=LEFT)
         
-        self.b_moins = Button(self.f_temps, text="-", width=1, command=self.decrementer_temps)
-        self.b_moins.pack(side=LEFT)
-        
-        self.var_temps = IntVar()
-        self.var_temps.set(0)
-        self.input_temps = Entry(self.f_temps, validate="key", width=3, textvariable=self.var_temps)
-        self.input_temps.pack(side=LEFT)
-        
+        create_nb_etage_input()
          # Frame parent pour l_edition
 
         self.l_edition = LabelFrame(f_menue, text="Édition", padx=20, pady=20, bg="#F5F5F5")
@@ -54,20 +136,16 @@ class FenetrePrincipale(Frame):
         self.var_selection = BooleanVar()
         self.var_personne = BooleanVar()
         
-    def incrementer_temps(self):
-        temps_actuel = self.var_temps.get()
-        self.var_temps.set(temps_actuel + 1)
     
-    def decrementer_temps(self):
-        temps_actuel = self.var_temps.get()
-        if temps_actuel > 0:
-            self.var_temps.set(temps_actuel - 1)
 
     def ouvrir_fenetre_modification(self):
+        
+        taille_max = (self.taille_max[0]*10,self.taille_max[1]*10)
         # Création de la fenêtre de modification
         self.fenetre_modif = Toplevel(self.master)
         self.fenetre_modif.title("Modification de la forme")
-        self.fenetre_modif.geometry("450x450")
+
+        self.fenetre_modif.geometry( str(taille_max[0] + 300) + "x" + str(taille_max[1] + 150))
         
         self.modife_liste_points = []
         self.obj_liste_ligne = []
@@ -75,13 +153,13 @@ class FenetrePrincipale(Frame):
         self.ligne_actuelle = None
         self.edition_forme_termine = False
         #liste de forme de base :
-        self.liste_forme_base = [[(0, 0), (200, 0), (200, 300), (0, 300)],[(0, 0), (200, 0), (200, 200), (0, 200)],[(0, 0), (200, 0), (100, 200)]] #sans decalage de 10 !
+        self.liste_forme_base = [[(5, 5), (195, 5), (195, 295), (5, 295)],[(5, 5), (195, 5), (195, 195), (5, 195)],[(5, 5), (195, 5), (100, 195)]] #sans decalage de 10 !
 
         # Création du canvas pour dessiner la forme
-        self.canvas_modif = Canvas(self.fenetre_modif, width=220, height=320, bg="#F0F0F0")
-        #dessiner une zone de 200x300 au centre du canvas
-        self.canvas_modif.create_rectangle(10, 10, 210, 310, fill="white",outline="white")
-        self.canvas_modif.pack(side=LEFT, padx=10, pady=10)
+        self.canvas_modif = Canvas(self.fenetre_modif, width=taille_max[0] + 10, height= taille_max[1] + 10, bg="#F0F0F0")
+        #dessiner une zone de 195x195 au centre du canvas
+        self.canvas_modif.create_rectangle(10, 10, taille_max[0], taille_max[1], fill="white",outline="white")
+        self.canvas_modif.pack(side=LEFT)
         
 
         # Création de la frame de modification
@@ -135,17 +213,18 @@ class FenetrePrincipale(Frame):
         def valider_forme ():
             #fermer la fenêtre de modification
             self.fenetre_modif.destroy()
-
-            return self.modife_liste_points
+            self.forme_etage = MultListe(plus_liste((-5,-5), self.modife_liste_points),1/10)
+            self.refresh_etage()
+            return 
     
         def ligne_preview(e):
             
-            event = (round(e.x/10)*10, round(e.y/10)*10)
+            event = (round(e.x/5)*5, round(e.y/5)*5)
             #texte qui affiche les coordonnées de la souris
             #si le texte existe déjà, on le supprime    
             if self.canvas_modif.find_withtag("coord"):
                 self.canvas_modif.delete("coord")
-            self.canvas_modif.create_text(100, 10, text=str((event[0]-10,event[1]-10)), tag="coord")
+            self.canvas_modif.create_text(taille_max[0]/2, 10, text=str((event[0]-5,event[1]-5)), tag="coord")
 
             if self.edition_forme_termine:
                 return
@@ -156,8 +235,8 @@ class FenetrePrincipale(Frame):
                     self.canvas_modif.delete(self.ligne_actuelle)
                 self.ligne_actuelle = self.canvas_modif.create_line(self.modife_liste_points[-1], (event[0], event[1]), fill="red")
             #si la souris est en dehors du canvas, on supprime la ligne
-            #seulement si la souris est en dehors de la zone de dessin (50, 10, 250, 310)
-            if event[0] < 10 or event[0] > 210 or event[1] < 10 or event[1] > 310:
+            #seulement si la souris est en dehors de la zone de dessin (5, 5, 195, 295)
+            if event[0]-5 < 5 or event[0]-5 > taille_max[0] or event[1] -5 < 5 or event[1] > taille_max[1]:
                 if self.ligne_actuelle is not None:
                     self.canvas_modif.delete(self.ligne_actuelle)
                     self.ligne_actuelle = None
@@ -171,13 +250,13 @@ class FenetrePrincipale(Frame):
             #arrondir les coordonnées de la souris
             event = (0,0)
             if type(e) == tuple:
-                 event = (round(e[0]/10)*10 + 10, round(e[1]/10)*10 + 10)
+                 event = (round(e[0]/5)*5 + 5, round(e[1]/5)*5 + 5)
 
             else:
-                event = (round(e.x/10)*10, round(e.y/10)*10)
+                event = (round(e.x/5)*5, round(e.y/5)*5)
             
-            #si la souris est en dehors de la zone de dessin (10, 10, 210, 310), on ne fait rien
-            if event[0] < 10 or event[0] > 210 or event[1] < 10 or event[1] > 310:
+            #si la souris est en dehors de la zone de dessin (5, 5, 195, 295), on ne fait rien
+            if event[0]-5 < 5 or event[0]-5 > taille_max[0] or event[1] -5 < 5 or event[1] > taille_max[1]:
                 return
             #si le point est déjà dans la liste, on arrete
             if event in self.modife_liste_points:
@@ -229,13 +308,13 @@ class FenetrePrincipale(Frame):
             for j in range(2):
                 if i + j < len(self.liste_forme_base):
                     canvas_index = i + j
-                    canvas = Canvas(frame_ligne, width=22, height=32, bg="white")
+                    canvas = Canvas(frame_ligne, width=taille_max[0]/10 + 2, height=taille_max[1]/10 + 2, bg="white")
                     canvas.create_polygon(plus_liste((3, 3), MultListe(self.liste_forme_base[canvas_index], 1 / 10)), fill="white", outline="black")
                     canvas.pack(side=LEFT, padx=5)
                     canvas.bind("<Button-1>", lambda e, i=canvas_index: charger_forme_base(i))
             
 
 root = Tk()
-app = FenetrePrincipale(root)
+app = FenetrePrincipale(root,taille_max=(20,30))
 app.pack()
 root.mainloop()
