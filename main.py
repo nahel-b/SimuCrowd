@@ -2,6 +2,7 @@ import chemin
 import affichage
 import lecteur
 import Calcul_simulation
+import editeur
 from classe import*
 
 #detaille sur la geometrie de l'immeuble
@@ -36,11 +37,15 @@ p9.basique((14.3,21.3),[(0,0)],8)
 
 scene = scene_class(batiment,[p1,p2,p3,p4,p5,p6,p7,p8,p9],60)
 
+editeur.lancer_editeur(taille_fenetre,zoom)
 
-chemin.initialisation_variable(scene,taille_fenetre)
-fichier = Calcul_simulation.calcul_basique(scene,1,60*60,"test")
-save(fichier.nom,fichier)
-lecteur.lancer_lecteur(fichier,taille_fenetre,zoom)
+# chemin.initialisation_variable(scene,taille_fenetre)
+# fichier = Calcul_simulation.calcul_basique(scene,1,60*60,"test")
+# save(fichier.nom,fichier)
+# lecteur.lancer_lecteur(fichier,taille_fenetre,zoom)
+
+
+
 #affichage.lancer_ex_chemin(batiment,taille_fenetre)
 
 #save(fichier.nom,fichier)
