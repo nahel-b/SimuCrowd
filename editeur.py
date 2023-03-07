@@ -10,7 +10,7 @@ class FenetrePrincipale(Frame):
         self.pack(fill=BOTH, expand=True)
 
         self.forme_etage = forme_etage
-        self.nb_etage
+        #self.nb_etage
 
         self.create_widgets()
 
