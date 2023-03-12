@@ -14,10 +14,10 @@ def multScal(s,a):
 def mult(a,b):
     return(a[0]*b[0],a[1]*b[1])
 
-def MultListe(a,z):
+def MultListe(liste,zoom):
         res = []
-        for couple in a:
-            res.append((couple[0]*z,couple[1]*z))
+        for couple in liste:
+            res.append((couple[0]*zoom,couple[1]*zoom))
         return res
 
 class encodeur(json.JSONEncoder):
@@ -70,10 +70,10 @@ def normal(A,B):
     u=(AB[0]/math.sqrt(AB[0]**2+AB[1]**2),AB[1]/math.sqrt(AB[0]**2+AB[1]**2))
     return u
 
-def plus_liste(p,l) :
-    res = [0]*len(l)
-    for i in range(len(l)):
-        res[i] = (l[i][0]+p[0],l[i][1]+p[1])
+def plus_liste(point,liste) :
+    res = [0]*len(liste)
+    for i in range(len(liste)):
+        res[i] = (liste[i][0]+point[0],liste[i][1]+point[1])
     return res
 #[[a,b],[c,d]] -> [a,b,c,d]
 def deconsrtuit(l):
@@ -226,4 +226,18 @@ def agrandir_forme(f, distance,k): #k : le nb de point a ajouter pour les coin c
     return nouvelle_forme[::-1]
 
 
+def tourner_forme(points, degrees):
+    #moyenne
+    avg_x = sum([p[0] for p in points]) / len(points)
+    avg_y = sum([p[1] for p in points]) / len(points)
+    radians = math.radians(degrees)
 
+    rotated_points = []
+    for point in points:
+        x = point[0] - avg_x
+        y = point[1] - avg_y
+        rotated_x = x * math.cos(radians) - y * math.sin(radians)
+        rotated_y = x * math.sin(radians) + y * math.cos(radians)      
+        rotated_points.append((rotated_x + avg_x, rotated_y + avg_y))
+  
+    return rotated_points

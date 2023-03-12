@@ -12,6 +12,7 @@ class batiment_class :
     def from_json(cls, data: dict):
         return cls(**data)
 
+
 class scene_class :
     def __init__(self,batiment,liste_personne,temps):
         self.batiment = batiment

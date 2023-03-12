@@ -39,6 +39,7 @@ scene = scene_class(batiment,[p1,p2,p3,p4,p5,p6,p7,p8,p9],60)
 
 #editeur.lancer_editeur(taille_fenetre,zoom)
 
+
 chemin.initialisation_variable(scene,taille_fenetre)
 fichier = Calcul_simulation.calcul_basique(scene,1,60*60,"test")
 save(fichier.nom,fichier)

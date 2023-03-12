@@ -142,7 +142,7 @@ def init_sortie_plus_rapide():
         sortie_plus_rapide.append(l)
 
 
-#prochaine sortie a prendre pour le chemin plus rapide
+#prochaine sortie a prendre pour le chemin plus rapide 
 def get_plus_rapide_prochain_sortie(etage,position,index_largeur):
     res_sortie = 0
     for i in range(len(liste_escalier_descendant[etage])) :
