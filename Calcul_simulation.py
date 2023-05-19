@@ -5,6 +5,8 @@ import chemin
 
 
 def get_etage(id):
+    #print (sc.liste_personne) en json stringify
+   
     return sc.liste_personne[id].liste_etage[-1][1]
     liste_etage = scene.liste_personne[id].liste_etage
     res = liste_etage[0][1]
@@ -76,6 +78,7 @@ def calcul_basique(scene,debut,temps,nom):
                         n = multScal(dist(ps.positions[i-1],p.positions[i-1]),sub(p.positions[i-1],ps.positions[i-1]))#(ri − rj )/dij
                         ForcePersonnes = add(ForcePersonnes,multScal( A*math.exp(((p.largeur/2)-dist(ps.positions[i-1],p.positions[i-1]))/B),n))
                 p.acceleration =  add( directionVoulue, add( ForceMur, add(ForcePersonnes,ForcePilier) ))
+
                 p.addDeltaPos(multScal(dt,p.vitesseActuelle),i)
 
                 #descendre si proche d'une sortie 

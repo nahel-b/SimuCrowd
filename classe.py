@@ -13,15 +13,16 @@ class batiment_class :
         return cls(**data)
 
 
+
 class scene_class :
     def __init__(self,batiment,liste_personne,temps):
         self.batiment = batiment
         self.liste_personne = liste_personne
-
+        self.temps = temps
     @classmethod
     def from_json(cls, data: dict):
         liste_personne = list(map(personne_classe.from_json, data["liste_personne"]))
-        return(data['batiment'],liste_personne)
+        return(data['batiment'],liste_personne,data['temps'])
 
 
 class personne_classe :

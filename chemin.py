@@ -36,6 +36,8 @@ def initialisation_variable(scene,taille_fenetre1):
     init_point_etage()
     init_sortie_plus_rapide()
 
+
+
 #renvoie la liste dist_point_sortie, qui contient pour chaque point de l'étage,
 #la distance la plus courte entre ce point et la sortie spécifiée 
 def get_point_dist(etage_num,num_sortie,index_largeur):
@@ -87,7 +89,7 @@ def get_point_dist(etage_num,num_sortie,index_largeur):
     return dist_point_sortie
 
 #pour chaque sortie, pour chaque etage la liste de la distance entre chacun des points de l'etage et de la sortie
-
+#point_sortie_etages[a][b][c][d] = (distance entre le point d de l'étage a et la sortie b avec un largeur d, prochain point)
 def init_point_etage():
     global point_sortie_etages
     point_sortie_etages = []
@@ -97,16 +99,17 @@ def init_point_etage():
         for sortie in range(len(liste_escalier_descendant[etage_num])):
             b = []
             for index_largeur in range(len(liste_largeur)):
-                print("index_largeur :" + str(index_largeur))
+                
                 b.append(get_point_dist(etage_num,sortie,index_largeur))
             a.append(b)
         point_sortie_etages.append(a)
 
-#calcul pour un point (pos_entre) le prochain point et la distance du chemine le plus court
+#calcul pour un point (pos_entre) le prochain point et la distance du chemin le plus court
 #entre ce point et la sortie specifiée
 def premier_point(etage_num,num_sortie,pos_entre,index_largeur):
     sortie = liste_escalier_descendant[etage_num][num_sortie]
     res = (100000,(0,0))
+    #print(liste_obstacle[index_largeur])
     liste_pol = liste_obstacle[index_largeur][etage_num]
     pol_point = deconsrtuit(liste_obstacle[index_largeur][etage_num])
     dist_point_sortie = point_sortie_etages[etage_num][num_sortie][index_largeur]

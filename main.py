@@ -34,20 +34,22 @@ p8 = personne_classe(0,0,0,[(0,0)],0,0,"",0,0)
 p8.basique((14.3,23.3),[(0,0)],7)
 p9 = personne_classe(0,0,0,[(0,0)],0,0,"",0,0)
 p9.basique((14.3,21.3),[(0,0)],8)
+p10 = personne_classe(0,0,0,[(0,0)],0,0,"",0,0)
+p10.basique((14.3,26.3),[(0,2)],9)
 
-scene = scene_class(batiment,[p1,p2,p3,p4,p5,p6,p7,p8,p9],60)
+scene = scene_class(batiment,[p1,p2,p3,p4,p5,p6,p7,p8,p9,p10],60)
 
 #editeur.lancer_editeur(taille_fenetre,zoom)
 
 
 chemin.initialisation_variable(scene,taille_fenetre)
-fichier = Calcul_simulation.calcul_basique(scene,1,60*60,"test")
+fichier = Calcul_simulation.calcul_basique(scene,1,60*60,"testp")
 save(fichier.nom,fichier)
 lecteur.lancer_lecteur(fichier,taille_fenetre,zoom)
 
 
 
-#affichage.lancer_ex_chemin(batiment,taille_fenetre)
+# affichage.lancer_ex_chemin(batiment,taille_fenetre)
 
 #save(fichier.nom,fichier)
 

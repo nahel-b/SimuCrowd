@@ -1,0 +1,80 @@
+{
+    "mode": "edition",
+    "nom": "nn",
+    "scene": {
+        "batiment": {
+            "forme_etage": [
+                [
+                    0.5,
+                    0.5
+                ],
+                [
+                    19.5,
+                    0.5
+                ],
+                [
+                    19.5,
+                    29.5
+                ],
+                [
+                    0.5,
+                    29.5
+                ]
+            ],
+            "liste_escalier_descendant": [
+                [
+                    [
+                        9.5,
+                        29.5
+                    ]
+                ],
+                [
+                    [
+                        0.5,
+                        23.5
+                    ]
+                ]
+            ],
+            "liste_obstacle": [
+                [],
+                []
+            ],
+            "nb_etage": 2,
+            "taille_max": [
+                20,
+                30
+            ]
+        },
+        "liste_personne": [
+            {
+                "acceleration": [
+                    0,
+                    0
+                ],
+                "couleur": "blue",
+                "id": 1,
+                "largeur": 0.7339635032416232,
+                "liste_etage": [
+                    [
+                        0,
+                        1
+                    ]
+                ],
+                "masse": 70,
+                "positions": [
+                    [
+                        7.5,
+                        23.0
+                    ]
+                ],
+                "vitesseActuelle": [
+                    0,
+                    0
+                ],
+                "vitesseMax": 3.5
+            }
+        ],
+        "temps": 30
+    },
+    "temps": 30
+}

@@ -112,6 +112,18 @@ def distMurPoint(posA,posB,p):
         return dist(posB,p)
     else:
         return dist(posA,p)
+    
+def MurPoint_point(posA,posB,p):
+    v = np.array([posB[0]-posA[0], posB[1]-posA[1]])
+    pos = np.array([p[0] -posA[0],p[1]-posA[1]])
+    v_norme = np.sqrt(sum(v**2))
+    h = (np.dot(pos, v)/v_norme**2)*v
+    if round (dist((0,0),h) + dist(h,v),4) == round(dist((0,0),v),4):
+        return (h[0]+posA[0],h[1]+posA[1])
+    elif dist(p,posA)>dist(p,posB):
+        return posB
+    else:
+        return posA
 
 def ortho(PosA,PosB,p):
     if PosA[0]>PosB[0]:
@@ -142,6 +154,12 @@ def save(nom,data):
     encode = (encodeur().encode(data))
     with open(nom + ".json", 'w') as f:
         json.dump(json.loads(encode),f, indent=4, sort_keys=True)
+
+def saveComplet(nom,data):
+    encode = (encodeur().encode(data))
+    with open(nom, 'w') as f:
+        json.dump(json.loads(encode),f, indent=4, sort_keys=True)
+
 
 def calcul_angle(a,b):#angle entre le vecteur a et le vecteur b 
     dot_prod = a[0]*b[0] + a[1]*b[1]
@@ -225,6 +243,19 @@ def agrandir_forme(f, distance,k): #k : le nb de point a ajouter pour les coin c
 
     return nouvelle_forme[::-1]
 
+def contient_polygone_point(pol,point):
+        inter = 0
+
+        for i in range (0,len(pol)):
+
+            if (pol[i][0]<=point[0]<=pol[(i+1)%len(pol)][0] or pol[i][0]>=point[0]>=pol[(i+1)%len(pol)][0]) and pol[i][0] != pol[(i+1)%len(pol)] :
+                a = (pol[(i+1)%len(pol)][1]-pol[i][1])/(pol[(i+1)%len(pol)][0]-pol[i][0])
+                b = pol[i][1]-a*pol[i][0] # car PosA appartient a la droite donc veridie l'equation
+                y_d = a*point[0] + b
+                if y_d>=point[1]:
+                    inter = inter+1
+                #print("inter")
+        return (inter%2==1)
 
 def tourner_forme(points, degrees):
     #moyenne

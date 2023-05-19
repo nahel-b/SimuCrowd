@@ -1,0 +1,99 @@
+{
+    "mode": "edition",
+    "nom": "n",
+    "scene": {
+        "batiment": {
+            "forme_etage": [
+                [
+                    0.5,
+                    0.5
+                ],
+                [
+                    19.5,
+                    0.5
+                ],
+                [
+                    19.5,
+                    29.5
+                ],
+                [
+                    0.5,
+                    29.5
+                ]
+            ],
+            "liste_escalier_descendant": [
+                [],
+                [],
+                []
+            ],
+            "liste_obstacle": [
+                [],
+                [],
+                []
+            ],
+            "nb_etage": 3,
+            "taille_max": [
+                20,
+                30
+            ]
+        },
+        "liste_personne": [
+            {
+                "acceleration": [
+                    0,
+                    0
+                ],
+                "couleur": "blue",
+                "id": 1,
+                "largeur": 0.7278801229460318,
+                "liste_etage": [
+                    [
+                        0,
+                        2
+                    ]
+                ],
+                "masse": 70,
+                "positions": [
+                    [
+                        6.1,
+                        18.8
+                    ]
+                ],
+                "vitesseActuelle": [
+                    0,
+                    0
+                ],
+                "vitesseMax": 3.5
+            },
+            {
+                "acceleration": [
+                    0,
+                    0
+                ],
+                "couleur": "blue",
+                "id": 2,
+                "largeur": 0.7278801229460318,
+                "liste_etage": [
+                    [
+                        0,
+                        2
+                    ]
+                ],
+                "masse": 70,
+                "positions": [
+                    [
+                        11.6,
+                        23.1
+                    ]
+                ],
+                "vitesseActuelle": [
+                    0,
+                    0
+                ],
+                "vitesseMax": 3.5
+            }
+        ],
+        "temps": 30
+    },
+    "temps": 30
+}

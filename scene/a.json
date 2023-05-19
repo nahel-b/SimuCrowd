@@ -1,0 +1,40 @@
+{
+    "mode": "edition",
+    "nom": "a",
+    "scene": {
+        "batiment": {
+            "forme_etage": [
+                [
+                    0.5,
+                    0.5
+                ],
+                [
+                    19.5,
+                    0.5
+                ],
+                [
+                    19.5,
+                    29.5
+                ],
+                [
+                    0.5,
+                    29.5
+                ]
+            ],
+            "liste_escalier_descendant": [
+                []
+            ],
+            "liste_obstacle": [
+                []
+            ],
+            "nb_etage": 1,
+            "taille_max": [
+                20,
+                30
+            ]
+        },
+        "liste_personne": [],
+        "temps": 11
+    },
+    "temps": 11
+}
